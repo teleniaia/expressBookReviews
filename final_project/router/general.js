@@ -16,20 +16,10 @@ public_users.post("/register", (req,res) => {
       } else {
         return res.status(404).json({message: "User already exists!"});
       }
-    }
-      return res.statif (authenticatedUser(username,password)); {
-        let accessToken = jwt.sign({
-            data: password
-          }, 'access', { expiresIn: 60 * 20 });
-          req.session.authorization = {
-            accessToken, username
-  
-        }
-        return res.status(200).send("Customer successfully logged in");
-      } else {
+    } else {
         return res.status(208).send("Incorrect Login. Check credentials");
-      }us(404).json({message: "Unable to register user."});
-  });// Get the book list available in the shop
+
+  }});// Get the book list available in the shop
 public_users.get('/',function (req, res) {
     res.send(JSON.stringify(books,null,4));
   
@@ -62,8 +52,8 @@ public_users.get('/title/:title',function (req, res) {
     isbns.forEach((isbn) => {
         if(books[isbn]["title"] === req.params.title) {
              booksbytitle.push({"isbn":isbn,
-                              "title":books[title]["title"],
-                              "reviews":books[title]["reviews"]});
+                              "title":books[isbn]["title"],
+                              "reviews":books[isbn]["reviews"]});
     }
 });
      res.send(JSON.stringify({booksbytitle}, null, 4));
@@ -72,25 +62,16 @@ public_users.get('/title/:title',function (req, res) {
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-
-    const isbnParam = req.params.isbn;
-
-    // Get the book reviews based on ISBN provided in the request parameters
-
-    const reviews = books[isbnParam];
-
-    if (!reviews) {
-
-      res.status(404).json({ message: 'No reviews found for the ISBN provided' });
-
-    } 
-
-    
-
-
-
-
-    
-
+    let booksbyreview = [];
+    let isbns = Object.keys(books);
+    isbns.forEach((isbn) => {
+        if(books[isbn]["reviews"] === req.params.title) {
+             booksbyreview.push({"isbn":isbn,
+                              "title":books[isbn]["title"],
+                              "reviews":books[isbn]["reviews"]});
+    }
 });
+     res.send(JSON.stringify({booksbyreview}, null, 4));
+});
+
 module.exports.general = public_users;
